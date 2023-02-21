@@ -7,7 +7,7 @@ import * as React from 'react'
 function Greeting({initialName = ''}) {
   const [name, setName] = React.useState(
     () => window.localStorage.getItem('name') ?? initialName,
-  )
+  ) // this function will only happen once, because of lazy initialization.. since its an expensive function, we rather pass an arrow function and by doing this, it will only be executed once.
 
   React.useEffect(() => {
     window.localStorage.setItem('name', name)

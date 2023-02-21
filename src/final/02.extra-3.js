@@ -14,7 +14,9 @@ function useLocalStorageState(key, defaultValue = '') {
   }, [key, state])
 
   return [state, setState]
-}
+} // custom hook
+
+//ask moritz about this, where is this initialName coming from.. is it on line 22 destructuring name and setname from the state and setState of the useLocalStorange component and reassigning those names or what?
 
 function Greeting({initialName = ''}) {
   const [name, setName] = useLocalStorageState('name', initialName)
@@ -33,9 +35,9 @@ function Greeting({initialName = ''}) {
     </div>
   )
 }
-
 function App() {
   return <Greeting />
 }
 
 export default App
+

@@ -4,6 +4,7 @@
 
 import * as React from 'react'
 
+
 function useLocalStorageState(
   key,
   defaultValue = '',
@@ -25,7 +26,7 @@ function useLocalStorageState(
     return typeof defaultValue === 'function' ? defaultValue() : defaultValue
   })
 
-  const prevKeyRef = React.useRef(key)
+  const prevKeyRef = React.useRef(key) // this is giving me a value wich I can mutate without triggering re-renders
 
   // Check the example at src/examples/local-state-key-change.js to visualize a key change
   React.useEffect(() => {
@@ -38,6 +39,7 @@ function useLocalStorageState(
   }, [key, state, serialize])
 
   return [state, setState]
+  
 }
 
 function Greeting({initialName = ''}) {
