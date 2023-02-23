@@ -1,22 +1,27 @@
 // useState: tic tac toe
-// http://localhost:3000/isolated/final/04.js
+// 💯 preserve state in localStorage
+// http://localhost:3000/isolated/final/04.extra-1.js
 
 import * as React from 'react'
 
 function Board() {
-  const [squares, setSquares] = React.useState(Array(9).fill(null))
+  const [squares, setSquares] = React.useState(
+    () =>
+      JSON.parse(window.localStorage.getItem('squares')) || Array(9).fill(null),
+  )
+
+  React.useEffect(() => {
+    window.localStorage.setItem('squares', JSON.stringify(squares))
+  }, [squares])
 
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
 
   function selectSquare(square) {
-    //if theres a winner of if theres a value in the squares at that particular index
     if (winner || squares[square]) {
       return
     }
-
-    // we use a copy to avoid mutating the state thats being managed.. so instead of updating the state directly we make a copy instead
     const squaresCopy = [...squares]
     squaresCopy[square] = nextValue
     setSquares(squaresCopy)
@@ -79,7 +84,7 @@ function calculateStatus(winner, squares, nextValue) {
 
 function calculateNextValue(squares) {
   return squares.filter(Boolean).length % 2 === 0 ? 'X' : 'O'
-} // the game starts with x By default..(because thats how it was written, so .filter(Boolean) is filtering out the squares wich return truthy, meaning the squares that are filled...if, the length of that new array is multiple of 2, the next player should be X)
+}
 
 function calculateWinner(squares) {
   const lines = [
