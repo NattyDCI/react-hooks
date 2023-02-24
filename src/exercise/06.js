@@ -12,7 +12,7 @@ function PokemonInfo({pokemonName}) {
 
   const [pokemon, setPokemon ] = React.useState(null)
 
-//changes5
+//changes6
 
   
 // this is the state of the world that we want to syncronise with the state of our application 
