@@ -14,7 +14,7 @@ function Greeting({initialName}) {
 
   React.useEffect (() => {
     window.localStorage.setItem("name", name)
-  })
+  }) // everytime the name is set via the event handler, this gets triggered. 
 
   function handleChange(event) {
     setName(event.target.value)

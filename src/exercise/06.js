@@ -6,9 +6,45 @@ import * as React from 'react'
 // fetchPokemon: the function we call to get the pokemon info
 // PokemonInfoFallback: the thing we show while we're loading the pokemon info
 // PokemonDataView: the stuff we use to display the pokemon info
-import {PokemonForm} from '../pokemon'
+import {fetchPokemon, PokemonForm, PokemonInfoFallback, PokemonDataView} from '../pokemon'
 
 function PokemonInfo({pokemonName}) {
+
+  const [pokemon, setPokemon ] = React.useState(null)
+
+
+
+  
+// this is the state of the world that we want to syncronise with the state of our application 
+//in our case the state of the world is the fetch request to fetch a pokemon.
+// this useEffectg will happen on every rerender of our component, or also in the first loading of the page, so, at the beginning, the pokemon variable is null, so we also have to write a condition for what.. so that it exits before fetching. 
+React.useEffect(() => {
+  if (!pokemonName) {
+    return
+  }
+  fetchPokemon(pokemonName).then(pokemonData => {
+    setPokemon(pokemonData)
+  })
+},[pokemonName])
+
+
+  // if there is no pokemon, then show a message saying chose a pokemon 
+if (!pokemonName) {
+  return ("Submit a Pokemon")
+} else if (!pokemon) {
+  return <PokemonInfoFallback name={pokemonName}/> // we have a pokemon name, but no pokemon, so for example that pokemon doesnt exist in the API; this fallback is just a component that we imported 
+} else {
+  return <PokemonDataView pokemon={pokemon}/> // also a component
+}
+
+
+
+  // return (
+  //   <div>
+  //   {result.data}
+  //   </div>
+  // )
+
   // 🐨 Have state for the pokemon (null)
   // 🐨 use React.useEffect where the callback should be called whenever the
   // pokemon name changes.
@@ -31,10 +67,15 @@ function PokemonInfo({pokemonName}) {
 
 function App() {
   const [pokemonName, setPokemonName] = React.useState('')
+  // const [pokemon, setPokemon] = React.useState(null)
 
-  function handleSubmit(newPokemonName) {
-    setPokemonName(newPokemonName)
-  }
+
+  
+
+   function handleSubmit(newPokemonName) {
+     setPokemonName(newPokemonName)
+  //   setPokemon(pokemonName)
+   }
 
   return (
     <div className="pokemon-info-app">
