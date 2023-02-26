@@ -11,13 +11,6 @@ import {fetchPokemon, PokemonForm, PokemonInfoFallback, PokemonDataView} from '.
 function PokemonInfo({pokemonName}) {  
   
 
-const [state, setState] = React.useState({
-  status: "idle",
-  pokemon: "null",
-  error:"null"
-})
-
-const {status, pokemon, error} = state
 
 //changes7
 
