@@ -1,18 +1,15 @@
-// useEffect: HTTP requests
-// http://localhost:3000/isolated/exercise/06.js
-
-import * as React from 'react'
-// 🐨 you'll want the following additional things from '../pokemon':
-// fetchPokemon: the function we call to get the pokemon info
-// PokemonInfoFallback: the thing we show while we're loading the pokemon info
-// PokemonDataView: the stuff we use to display the pokemon info
 import {fetchPokemon, PokemonForm, PokemonInfoFallback, PokemonDataView} from '../pokemon'
 
 function PokemonInfo({pokemonName}) {  
-  
+  const [state, setState] = React.useState({
+  status: "idle",
+  pokemon: "null",
+  error:"null"
+})
 
+const {status, pokemon, error} = state
 
-//changes7
+//changes6
 
 // this is the state of the world that we want to syncronise with the state of our application 
 //in our case the state of the world is the fetch request to fetch a pokemon.
