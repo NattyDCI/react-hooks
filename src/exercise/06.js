@@ -19,7 +19,7 @@ const [state, setState] = React.useState({
 
 const {status, pokemon, error} = state
 
-//changes6
+//changes7
 
 // this is the state of the world that we want to syncronise with the state of our application 
 //in our case the state of the world is the fetch request to fetch a pokemon.
