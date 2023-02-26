@@ -1,3 +1,5 @@
+
+import * as React from "react"
 import {fetchPokemon, PokemonForm, PokemonInfoFallback, PokemonDataView} from '../pokemon'
 
 function PokemonInfo({pokemonName}) {  
