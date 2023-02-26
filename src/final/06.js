@@ -11,6 +11,7 @@ import {
 
 function PokemonInfo({pokemonName}) {
   const [pokemon, setPokemon] = React.useState(null)
+  const error = {message: "oh no bad error"}
 
   React.useEffect(() => {
     if (!pokemonName) {
@@ -19,6 +20,7 @@ function PokemonInfo({pokemonName}) {
     setPokemon(null)
     fetchPokemon(pokemonName).then(pokemon => setPokemon(pokemon))
   }, [pokemonName])
+
 
   if (!pokemonName) {
     return 'Submit a pokemon'

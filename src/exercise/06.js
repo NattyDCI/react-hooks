@@ -8,13 +8,19 @@ import * as React from 'react'
 // PokemonDataView: the stuff we use to display the pokemon info
 import {fetchPokemon, PokemonForm, PokemonInfoFallback, PokemonDataView} from '../pokemon'
 
-function PokemonInfo({pokemonName}) {
+function PokemonInfo({pokemonName}) {  
+  
 
-  const [pokemon, setPokemon ] = React.useState(null)
+const [state, setState] = React.useState({
+  status: "idle",
+  pokemon: "null",
+  error:"null"
+})
+
+const {status, pokemon, error} = state
 
 //changes6
 
-  
 // this is the state of the world that we want to syncronise with the state of our application 
 //in our case the state of the world is the fetch request to fetch a pokemon.
 // this useEffectg will happen on every rerender of our component, or also in the first loading of the page, so, at the beginning, the pokemon variable is null, so we also have to write a condition for what.. so that it exits before fetching. 
@@ -22,53 +28,39 @@ React.useEffect(() => {
   if (!pokemonName) {
     return
   }
-  fetchPokemon(pokemonName).then(pokemonData => {
-    setPokemon(pokemonData)
-  })
-},[pokemonName])
+  setState({status:"pending"})
+  fetchPokemon(pokemonName).then(
+    pokemon => { 
+      setState({status:"resolved", pokemon})
+     
+    }, 
+    error => { 
+      setState({error, status:"rejected"})
+    }
+  )
+}, [pokemonName])
 
-
-  // if there is no pokemon, then show a message saying chose a pokemon 
-if (!pokemonName) {
+if (status === "idle") {
   return ("Submit a Pokemon")
-} else if (!pokemon) {
+}
+else if (status === "pending") {
   return <PokemonInfoFallback name={pokemonName}/> // we have a pokemon name, but no pokemon, so for example that pokemon doesnt exist in the API; this fallback is just a component that we imported 
-} else {
+   
+} else if (status === "rejected") {
+  return (
+  <div role="alert">
+  There was an error: 
+  <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+</div>)
+} else if (status === "resolved") {
   return <PokemonDataView pokemon={pokemon}/> // also a component
 }
-
-
-
-  // return (
-  //   <div>
-  //   {result.data}
-  //   </div>
-  // )
-
-  // 🐨 Have state for the pokemon (null)
-  // 🐨 use React.useEffect where the callback should be called whenever the
-  // pokemon name changes.
-  // 💰 DON'T FORGET THE DEPENDENCIES ARRAY!
-  // 💰 if the pokemonName is falsy (an empty string) then don't bother making the request (exit early).
-  // 🐨 before calling `fetchPokemon`, clear the current pokemon state by setting it to null.
-  // (This is to enable the loading state when switching between different pokemon.)
-  // 💰 Use the `fetchPokemon` function to fetch a pokemon by its name:
-  //   fetchPokemon('Pikachu').then(
-  //     pokemonData => {/* update all the state here */},
-  //   )
-  // 🐨 return the following things based on the `pokemon` state and `pokemonName` prop:
-  //   1. no pokemonName: 'Submit a pokemon'
-  //   2. pokemonName but no pokemon: <PokemonInfoFallback name={pokemonName} />
-  //   3. pokemon: <PokemonDataView pokemon={pokemon} />
-
-  // 💣 remove this
-  return 'TODO'
+ throw new Error (`this should be impossible`)
 }
 
 function App() {
   const [pokemonName, setPokemonName] = React.useState('')
   // const [pokemon, setPokemon] = React.useState(null)
-
 
   
 
