@@ -1,10 +1,11 @@
 
 import * as React from "react"
 import {fetchPokemon, PokemonForm, PokemonInfoFallback, PokemonDataView} from '../pokemon'
+import { ErrorBoundary, resetErrorBoundary } from "react-error-boundary"
 
 function PokemonInfo({pokemonName}) {  
   const [state, setState] = React.useState({
-  status: "idle",
+  status: pokemonName ? "pending" : "idle",
   pokemon: "null",
   error:"null"
 })
@@ -39,16 +40,24 @@ else if (status === "pending") {
   return <PokemonInfoFallback name={pokemonName}/> // we have a pokemon name, but no pokemon, so for example that pokemon doesnt exist in the API; this fallback is just a component that we imported 
    
 } else if (status === "rejected") {
-  return (
-  <div role="alert">
-  There was an error: 
-  <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
-</div>)
+  
+  throw error 
+  
 } else if (status === "resolved") {
   return <PokemonDataView pokemon={pokemon}/> // also a component
 }
  throw new Error (`this should be impossible`)
 }
+function ErrorFallback({error, resetErrorBoundary}) {
+  return (
+    <div>
+      There was an console.error;
+      <pre style ={{whiteSpace:"normal"}}>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try Again</button>
+    </div>
+  )
+}
+
 
 function App() {
   const [pokemonName, setPokemonName] = React.useState('')
@@ -61,12 +70,19 @@ function App() {
   //   setPokemon(pokemonName)
    }
 
+   
+function handleReset() {
+  setPokemonName(" ")
+}
+
   return (
     <div className="pokemon-info-app">
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
+        <ErrorBoundary FallbackComponent={ErrorFallback} onReset={handleReset} resetKeys={[]}>
         <PokemonInfo pokemonName={pokemonName} />
+        </ErrorBoundary>
       </div>
     </div>
   )
